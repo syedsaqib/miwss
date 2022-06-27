@@ -10,7 +10,7 @@ VALUES
 
 INSERT INTO users (id, username, password, full_name, role)
 VALUES
-    ('30d39854-da4f-43ec-85bc-c999a4e3a1a9', 'customer1', 'abcd1234', 'One', 'CUSTOMER'),
-    ('bb16a1fd-e630-4c06-a2fb-05cda54292eb', 'customer2', 'abcd1234', 'Two', 'CUSTOMER'),
-    ('88d7bd2a-a092-4f2a-b969-d50e31db2c62', 'customer3', 'abcd1234', 'Three', 'CUSTOMER'),
-    ('13f59dd9-4552-436a-b858-66358ffa6b30', 'admin1', 'admin1234', 'Admin User', 'ADMIN');
+    ('30d39854-da4f-43ec-85bc-c999a4e3a1a9', 'customer1', 'abcd1234', 'One', 'ROLE_CUSTOMER'),
+    ('bb16a1fd-e630-4c06-a2fb-05cda54292eb', 'customer2', 'abcd1234', 'Two', 'ROLE_CUSTOMER'),
+    ('88d7bd2a-a092-4f2a-b969-d50e31db2c62', 'customer3', 'abcd1234', 'Three', 'ROLE_CUSTOMER'),
+    ('13f59dd9-4552-436a-b858-66358ffa6b30', 'admin1', 'admin1234', 'Admin User', 'ROLE_ADMIN');
