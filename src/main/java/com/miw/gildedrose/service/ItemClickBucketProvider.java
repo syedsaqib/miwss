@@ -7,9 +7,10 @@ import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.map.PassiveExpiringMap;
 
 import javax.annotation.PostConstruct;
-import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import static com.miw.gildedrose.common.util.IdUtils.doWithSyncMap;
 
 /**
  * A provider for item clicks per hour
@@ -59,10 +60,6 @@ public class ItemClickBucketProvider {
      */
     public void resetItemClicks(String itemId) {
         doWithSyncMap(itemClickBucket).remove(itemId);
-    }
-
-    private Map<String, Integer> doWithSyncMap(Map<String,Integer> bucket) {
-        return Collections.synchronizedMap(bucket);
     }
 
 }
