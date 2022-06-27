@@ -1,0 +1,15 @@
+.project
+.settings
+.idea
+.classpath
+.factorypath
+docs
+docs/**
+kipapi-rest.log
+target
+target/**
+h2-db/**
+*.iml
+**/*.iml
+**/.classpath
+**/.factorypath

@@ -1,0 +1,49 @@
+server:
+  port: 8088
+  servlet:
+    context-path: /rest/api
+
+spring:
+  jpa:
+    database: h2
+    database-platform: org.hibernate.dialect.H2Dialect
+    generate-ddl: true
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: create
+  sql:
+    init:
+      mode: always
+
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  datasource:
+    url: jdbc:h2:file:./h2-db/gildedrose
+    username: gildedrose
+    password: gildedrose
+    driverClassName: org.h2.Driver
+
+  data:
+    rest:
+      base-path: /api/gilded-rose
+
+gildedRose:
+  item:
+    clicks: 10
+    expireAfterMinutes: 60
+    pricingStrategy: surge
+
+  pricing:
+    increase-percent: 10
+
+  # authentication token expiry is 4 hours
+  authentication:
+    tokenExpiryHours: 4
+
+# make our application logging at DEBUG level - default is INFO
+logging:
+  level:
+    com.miw.gildedrose: DEBUG
+
