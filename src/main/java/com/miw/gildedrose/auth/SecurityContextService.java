@@ -12,6 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
@@ -40,7 +41,13 @@ public class SecurityContextService {
     /**
      * A temporary authentication token cache. Used common collections expiring map that expires after #tokenExpireHours
      */
-    private final Map<String, GildedRoseAuthenticationToken> tokenCache = new PassiveExpiringMap<>(TimeUnit.HOURS.toMillis(tokenExpireHours));
+    private Map<String, GildedRoseAuthenticationToken> tokenCache;
+
+    @PostConstruct
+    public void init() {
+        // do it on bean initialization so property is available by then
+        tokenCache = new PassiveExpiringMap<>(TimeUnit.HOURS.toMillis(tokenExpireHours));
+    }
 
     /**
      * Creates a spring security context and put context in temp cache
@@ -49,9 +56,12 @@ public class SecurityContextService {
         String token = IdUtils.generateRandomUUIDNoDashes();
 
         user.setToken(token);
-        user.setLastAccessed(LocalDateTime.now());
+        user.setTokenCreatedAt(LocalDateTime.now());
 
         tokenCache.put(token, creatAuthenticationContext(user));
+
+        log.debug("--> creating spring context for user: {}", user.getUsername());
+        log.debug("<-- auth token cache has now: {} tokens...", tokenCache.size());
 
         return user;
     }

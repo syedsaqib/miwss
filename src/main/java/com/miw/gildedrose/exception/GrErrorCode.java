@@ -9,6 +9,7 @@ public enum GrErrorCode {
     UNKNOWN_ERROR("Unknown Error"),
     DATABASE_ERROR("Database Error"),
     INVALID_LOGIN("UserName or password is invalid!"),
+    INVALID_AUTH_TOKEN("Authorization token is invalid or expired!"),
     ACCESS_DENIED("Resource is forbidden"),
     INSUFFICIENT_QUANTITY("Item quantity is not available")
     ;
