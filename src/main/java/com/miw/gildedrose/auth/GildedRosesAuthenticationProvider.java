@@ -9,10 +9,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
+/**
+ * Spring security Authentication provider for GuildedRoses application
+ *
+ * @author ssaqib
+ * @since v0.1
+ */
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class GilderRosesAuthenticationProvider implements AuthenticationProvider {
+public class GildedRosesAuthenticationProvider implements AuthenticationProvider {
     private final SecurityContextService securityContextService;
 
     @Override

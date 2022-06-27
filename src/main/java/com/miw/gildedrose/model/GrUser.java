@@ -40,7 +40,6 @@ public class GrUser implements UserDetails, WithId {
 
     private String token;
 
-    @JsonIgnore
     private LocalDateTime tokenCreatedAt;
 
     /** all methods below are to make GrUser as spring-security UserDetails but don't return in response */

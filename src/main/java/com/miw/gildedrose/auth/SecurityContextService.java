@@ -15,10 +15,14 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+
+import static com.miw.gildedrose.common.util.IdUtils.doWithSyncMap;
 
 /**
  * Class to hold user's tokens in an expiring map i.e. in-memory.
@@ -58,7 +62,7 @@ public class SecurityContextService {
         user.setToken(token);
         user.setTokenCreatedAt(LocalDateTime.now());
 
-        tokenCache.put(token, creatAuthenticationContext(user));
+        doWithSyncMap(tokenCache).put(token, creatAuthenticationContext(user));
 
         log.debug("--> creating spring context for user: {}", user.getUsername());
         log.debug("<-- auth token cache has now: {} tokens...", tokenCache.size());
@@ -70,7 +74,7 @@ public class SecurityContextService {
      * Returns AuthenticationToken object from authorization token
      */
     public GildedRoseAuthenticationToken retrieveAuthenticationToken(String token) {
-        return tokenCache.get(token);
+        return doWithSyncMap(tokenCache).get(token);
     }
 
     /**
@@ -79,7 +83,7 @@ public class SecurityContextService {
      * @return true if token existed and removed
      */
     public boolean removeToken(String token) {
-       return token != null && tokenCache.remove(token) != null;
+       return token != null && doWithSyncMap(tokenCache).remove(token) != null;
     }
 
     public GrUser logOff() {
@@ -101,6 +105,17 @@ public class SecurityContextService {
     }
 
     /**
+     * retrieves all tokens of a specific user
+     */
+    public List<GrUser> retrieveAllTokensByUsername(String username) {
+        return doWithSyncMap(tokenCache).values().stream()
+                .filter(token -> (token.getPrincipal() instanceof GrUser) && username.equals(token.getName()))
+                .map(token -> (GrUser) token.getPrincipal())
+                .sorted(Comparator.comparing(GrUser::getTokenCreatedAt))
+                .collect(Collectors.toList());
+    }
+
+    /**
      * clear all tokens of a specific user
      */
     public void removeAllUserTokens(String username) {
@@ -108,7 +123,7 @@ public class SecurityContextService {
                 .filter(entry -> username.equals(entry.getValue().getName()))
                 .map(Map.Entry::getKey).collect(Collectors.toSet());
 
-        tokens.forEach(tokenCache::remove);
+        tokens.forEach(token -> doWithSyncMap(tokenCache).remove(token));
     }
 
     public GildedRoseAuthenticationToken creatAuthenticationContext(GrUser user) {
@@ -131,6 +146,18 @@ public class SecurityContextService {
             this.user.setPassword(null);
             // set isAuthenticated only true when token is set
             setAuthenticated(user.getToken() != null);
+        }
+
+        /**
+         * Create authentication token with just bearer token only
+         */
+        public static GildedRoseAuthenticationToken fromBearerToken(String token) {
+            GrUser user = GrUser.builder()
+                            .token(token)
+                            .role("ROLE_TEMPORARY") // just to fulfill role requirements
+                            .build();
+
+            return new GildedRoseAuthenticationToken(user);
         }
 
         /**

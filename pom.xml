@@ -6,7 +6,7 @@
 
     <groupId>com.miw.exercise</groupId>
     <artifactId>gilded-rose</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.2-SNAPSHOT</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

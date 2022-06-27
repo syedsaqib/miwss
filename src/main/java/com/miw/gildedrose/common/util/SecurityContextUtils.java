@@ -1,8 +1,12 @@
 package com.miw.gildedrose.common.util;
 
+import com.miw.gildedrose.auth.SecurityContextService.GildedRoseAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * Common spring security context utils
@@ -26,6 +30,14 @@ public final class SecurityContextUtils {
         }
 
         return null;
+    }
+
+    /**
+     * Builds and return a new {@link GildedRoseAuthenticationToken} object.
+     * This is used from spring security context's filter
+     */
+    public static GildedRoseAuthenticationToken buildGrAuthenticationToken(String token) {
+        return token == null ? null : GildedRoseAuthenticationToken.fromBearerToken(token);
     }
 
 }
